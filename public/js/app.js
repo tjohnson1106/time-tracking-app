@@ -22,7 +22,7 @@ class TimersDashboard extends React.Component {
     ],
   };
 
-  handleFormSubmit = (timer) => {
+  handleCreateFormSubmit = (timer) => {
     this.createTimer(timer);
   };
 
@@ -58,7 +58,7 @@ class ToggleableTimerForm extends React.Component {
     this.setState({ isOpen: true });
   };
 
-  handleFormClose = () =>{
+  handleFormClose = () => {
     this.setState({ isOpen: false });
   };
 
@@ -115,6 +115,27 @@ class EditableTimer extends React.Component {
     editFormOpen: false,
   };
 
+  handleEditClick= () => {
+    this.openForm();
+  };
+
+  handleFormClose = () => {
+    this.closeForm();
+  };
+
+  handleSubmit = (timer) => {
+    this.props.onFormSubmit(timer);
+    this.closeForm();
+  };
+
+  closeForm = () => {
+    this.setState({ editFormOpen: false });
+  };
+
+  openForm = () => {
+    this.setState({ editFormOpen: true });
+  };
+
   render() {
     if (this.state.editFormOpen) {
       return (
@@ -122,7 +143,9 @@ class EditableTimer extends React.Component {
           id={this.props.id}
           title={this.props.title}
           project={this.props.project}
-        />
+          onFormSubmit={thisl.handleSubmit}
+          onFormClose={this.handleFormClose}
+          />
       );
     } else {
       return (
@@ -132,6 +155,7 @@ class EditableTimer extends React.Component {
           project={this.props.project}
           elapsed={this.props.elapsed}
           runningSince={this.props.runningSince}
+          onEditClick={this.handleEditClick}
         />
       );
     }
@@ -156,6 +180,12 @@ class Timer extends React.Component {
             </h2>
           </div>
           <div className='extra content'>
+            <span
+            className='right floated edit icon'
+            onClick={this.props.onEditClick}
+            >
+            <i className='edit icon' />
+            </span>
             <span className='right floated edit icon'>
               <i className='edit icon' />
             </span>
@@ -190,7 +220,7 @@ class TimerForm extends React.Component {
     this.props.onFormSubmit({
       id: this.props.id,
       title: this.state.title,
-      project: this.state.project
+      project: this.state.project,
     });
   };
 
